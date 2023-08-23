@@ -1,0 +1,6 @@
+aside.EmojiPickerReact {
+  width: auto !important;
+  height: 400px !important;
+  background: none;
+  transition: all ease 0.3s;
+}
