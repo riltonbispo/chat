@@ -95,7 +95,47 @@ export const AllChats: ChatType[] = [
 
 export const AllMessages: MessageType[] = [
   {
+    author: 1234,
+    body: "Lorem IpsumLorem Ips",
+  },
+  {
     author: 123,
+    body: "Lorem IpsumLorem IpsumLoorem Ipsum",
+  },
+  {
+    author: 123,
+    body: "umLorem Ipem Ipsum",
+  },
+  {
+    author: 1234,
+    body: "Lorem Ipsum",
+  },
+  {
+    author: 1234,
+    body: "Lorem IpsumLorem IpsumLoLorem IpsumLorem IpsumLoLorem IpsumLorem IpsumLoLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum",
+  },
+  {
+    author: 1234,
+    body: "Lorem IpsumLorem Ips",
+  },
+  {
+    author: 123,
+    body: "Lorem IpsumLorem IpsumLoorem Ipsum",
+  },
+  {
+    author: 123,
+    body: "umLorem Ipem Ipsum",
+  },
+  {
+    author: 1234,
+    body: "Lorem Ipsum",
+  },
+  {
+    author: 1234,
+    body: "Lorem IpsumLorem IpsumLoLorem IpsumLorem IpsumLoLorem IpsumLorem IpsumLoLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsum",
+  },
+  {
+    author: 1234,
     body: "Lorem IpsumLorem Ips",
   },
   {
