@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
 
-module.exports = nextConfig
+module.exports = {
+  images: {
+    domains: ["w7.pngwing.com", "blog.iprocess.com.br"],
+    formats: ["image/avif", "image/webp"],
+  },
+};
