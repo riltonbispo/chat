@@ -5,13 +5,14 @@ import {
   useCreateUserWithEmailAndPassword,
   useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
-import { auth } from "@/lib/firebaseconfig";
+import { auth, addUser} from "@/lib/firebaseconfig";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hasAccount, setHasAccount] = useState(false);
+
 
   const [
     createUserWithEmailAndPassword,
@@ -30,11 +31,16 @@ const Login = () => {
   const handleCreateAccount = async () => {
     try {
       await createUserWithEmailAndPassword(email, password);
+      await addUser(email, username)
       await signInWithEmailAndPassword(email, password);
     } catch (error) {
       console.error("Erro ao criar conta:", error);
     }
   };
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(email, password)
+  }
 
   if (createError || signInError) {
     return (
@@ -51,7 +57,6 @@ const Login = () => {
   if (signInUser) {
     return (
       <div>
-        <p>UserName: {username}</p>
         <p>Email: {signInUser.user.email}</p>
       </div>
     );
@@ -106,7 +111,7 @@ const Login = () => {
             <>
               <button
                 className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-                onClick={() => signInWithEmailAndPassword(email, password)}
+                onClick={handleLogin}
               >
                 Login
               </button>
