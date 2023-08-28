@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useCreateUserWithEmailAndPassword,
   useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
-import { auth, addUser} from "@/lib/firebaseconfig";
+import { auth, addUser, currentUser } from "@/lib/firebaseconfig";
+import { useUser } from "@/userContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [hasAccount, setHasAccount] = useState(false);
+ const [hasAccount, setHasAccount] = useState(false);
 
+  const uContext = useUser();
 
   const [
     createUserWithEmailAndPassword,
@@ -31,16 +33,24 @@ const Login = () => {
   const handleCreateAccount = async () => {
     try {
       await createUserWithEmailAndPassword(email, password);
-      await addUser(email, username)
-      await signInWithEmailAndPassword(email, password);
+      await addUser(email, username);
+      await handleLogin();
     } catch (error) {
       console.error("Erro ao criar conta:", error);
     }
   };
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(email, password)
-  }
+  const handleLogin = async () => {
+    signInWithEmailAndPassword(email, password);
+    try {
+      const user = await currentUser(email);
+      uContext?.setUser(user)
+    } catch (error) {
+      console.error('Erro:', error);
+    }
+    
+  };
+
 
   if (createError || signInError) {
     return (
@@ -57,7 +67,9 @@ const Login = () => {
   if (signInUser) {
     return (
       <div>
-        <p>Email: {signInUser.user.email}</p>
+        <p>Email: {uContext?.user?.email}</p>
+        <p>Name: {uContext?.user?.username}</p>
+        <p>ID: {uContext?.user?.id}</p>
       </div>
     );
   }
