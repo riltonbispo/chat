@@ -8,7 +8,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
 
 import { UserType } from "@/types/ChatTypes";
 
@@ -99,5 +99,13 @@ export const createChat = async (u1: UserType, u2: UserType) => {
       with: u1.id,
     }),
   });
+};
 
+export const onChatList = (userId: string, setChatList: any) => {
+  return onSnapshot(doc(db, "users", userId), (doc) => {
+    let data = doc.data();
+    if (data?.chats) {
+      setChatList(data?.chats);
+    }
+  });
 };
