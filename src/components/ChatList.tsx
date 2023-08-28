@@ -17,13 +17,6 @@ const ChatList = ({ ...props }: Props) => {
       }`}
       onClick={props.onClick}
     >
-      <Image
-        src={props.data.image}
-        width={40}
-        height={40}
-        alt="Picture of the author"
-        className="ml-2 rounded-full"
-      />
       {/* ALL LIST */}
       <div className="flex-1 flex flex-col justify-center h-full border-b border-gray-300 px-2 flex-wrap min-w-0">
         {/* UNIC LIST */}
