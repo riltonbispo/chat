@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 
-import { UserType } from "@/types/ChatTypes";
+import { ChatType, UserType } from "@/types/ChatTypes";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD4Z6ubIrS-Rd2hXDaD4Wl6KK02_kGWHI8",
@@ -109,3 +109,12 @@ export const onChatList = (userId: string, setChatList: any) => {
     }
   });
 };
+
+export const onChatContent = (chatId: string, setList: any) => {
+  return onSnapshot(doc(db, 'chats', chatId), (doc) => {
+    if (doc) {
+      let data: any = doc.data()
+      setList(data.messages)
+    }
+  })
+}
