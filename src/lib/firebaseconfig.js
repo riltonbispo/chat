@@ -3,14 +3,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import {
   getDocs,
+  getDoc,
   getFirestore,
   doc,
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
-
-import { ChatType, UserType } from "@/types/ChatTypes";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD4Z6ubIrS-Rd2hXDaD4Wl6KK02_kGWHI8",
@@ -29,11 +28,11 @@ export const db = getFirestore(app);
 const usersCollections = collection(db, "users");
 const chatsCollections = collection(db, "chats");
 
-export const addUser = (email: string, name: string) => {
+export const addUser = (email, name) => {
   addDoc(usersCollections, { name, email });
 };
 
-export const currentUser = async (email: string) => {
+export const currentUser = async (email) => {
   try {
     const result = await getDocs(usersCollections);
     const foundUser = result.docs.find((doc) => doc.data().email === email);
@@ -57,8 +56,8 @@ export const currentUser = async (email: string) => {
   }
 };
 
-export const contactList = async (userId: string) => {
-  let list: UserType[] = [];
+export const contactList = async (userId) => {
+  let list = [];
   let results = await getDocs(usersCollections);
   results.forEach((result) => {
     let data = result.data();
@@ -75,7 +74,7 @@ export const contactList = async (userId: string) => {
   return list;
 };
 
-export const createChat = async (u1: UserType, u2: UserType) => {
+export const createChat = async (u1, u2) => {
   let newChat = await addDoc(chatsCollections, {
     messages: [],
     users: [u1.id, u2.id],
@@ -101,20 +100,62 @@ export const createChat = async (u1: UserType, u2: UserType) => {
   });
 };
 
-export const onChatList = (userId: string, setChatList: any) => {
+export const onChatList = (userId, setChatList) => {
   return onSnapshot(doc(db, "users", userId), (doc) => {
     let data = doc.data();
     if (data?.chats) {
-      setChatList(data?.chats);
+      const sortedChats = data.chats.sort((a, b) => b.lastMessageDate - a.lastMessageDate);
+      setChatList(sortedChats);
     }
   });
 };
 
-export const onChatContent = (chatId: string, setList: any) => {
-  return onSnapshot(doc(db, 'chats', chatId), (doc) => {
+export const onChatContent = (chatId, setList, setUsers) => {
+  return onSnapshot(doc(db, "chats", chatId), (doc) => {
     if (doc) {
-      let data: any = doc.data()
-      setList(data.messages)
+      let data = doc.data();
+      setList(data.messages);
+      setUsers(data.users);
     }
-  })
-}
+  });
+};
+
+export const sendMessage = async (chatData, userId, type, body, users) => {
+  const chatRef = doc(db, "chats", chatData.chatId);
+
+  let now = new Date();
+
+  updateDoc(chatRef, {
+    messages: arrayUnion({
+      type,
+      author: userId,
+      body,
+      date: now,
+    }),
+  });
+
+  for (let i in users) {
+    let userRef = doc(db, "users", users[i]);
+    let userSnap = await getDoc(userRef); // Você precisa buscar os dados do documento
+
+    if (userSnap.exists()) {
+      let uData = userSnap.data();
+      if (uData.chats) {
+        let chats = [...uData.chats];
+
+        for (let e in chats) {
+          if (chats[e].chatId == chatData.chatId) {
+            chats[e].lastMessage = body;
+            chats[e].lastMessageDate = now;
+          }
+        }
+
+        const newUserRef = doc(db, "users", users[i]);
+
+        await updateDoc(newUserRef, {
+          chats,
+        });
+      }
+    }
+  }
+};
