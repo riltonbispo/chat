@@ -1,16 +1,29 @@
-import React from "react";
-import { MessageType } from "@/types/ChatTypes";
+'user client'
+
+import React, {useState, useEffect} from "react";
+import { UserType, ChatType } from "@/types/ChatTypes";
 
 type Props = {
-  data: MessageType;
-  user: {
-    id: number;
-    avatar: string;
-    name: string;
-  };
+  data: ChatType
+  user: UserType
 };
 
 const Message = ({ ...props }: Props) => {
+
+  const [time, setTime] = useState('')
+
+  useEffect(()=> {
+    if (props.data.date > 0) {
+      const d = new Date(props.data.date.seconds * 1000);
+      const hours = d.getHours();
+      const minutes = d.getMinutes();
+      const formattedHours = hours < 10 ? '0' + hours : hours.toString();
+      const formattedMinutes = minutes < 10 ? '0' + minutes : minutes.toString();
+      setTime(`${formattedHours}:${formattedMinutes}`);
+    }
+  }, [props.data])
+
+
   return (
     // Message Line
     <div
@@ -27,7 +40,7 @@ const Message = ({ ...props }: Props) => {
         {/* Message Text */}
         <div className="">{props.data.body}</div>
         {/* Message Date */}
-        <div className="text-right">20:00</div>
+        <div className="text-right">{time}</div>
       </div>
     </div>
   );
