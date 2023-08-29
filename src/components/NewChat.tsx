@@ -1,8 +1,11 @@
+'use client'
+
 import Button from "@/components/Button";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import { useState } from "react";
-import Image from "next/image";
+import { useEffect, useState } from "react";
 import { UserType, ChatType } from "@/types/ChatTypes";
+import { contactList, createChat } from "@/lib/firebaseconfig";
+import { RiArrowLeftLine } from "react-icons/ri";
+
 
 type Props = {
   show: boolean
@@ -12,61 +15,40 @@ type Props = {
 }
 
 const NewChat = ({...props} : Props) => {
-  const [list, setList] = useState([
-    {
-      id: 123,
-      avatar:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
-      name: "Name teste",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
-      name: "Name teste",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
-      name: "Name teste",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
-      name: "Name teste",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
-      name: "Name teste",
-    },
-  ]);
+  const [list, setList] = useState<any[]>([]);
 
+  useEffect(() => {
+      const getList = async () => {
+        if(props.user) {
+          let results = await contactList(props.user.id)
+          setList(results)
+        }
+      }
+      getList()
+  }, [props.user])
+  
   const handleClose = () => {
     props.setShow(false)
   }
+
+  const addNewChat = async (u: UserType) => {
+    await createChat(props.user, u)
+
+    handleClose()
+  }
+
   return (
-    <div className={`max-w-sm w-1/3 fixed top-0 bottom-0 bg-white flex flex-col ${props.show ? 'left-0' : '-left-full' }`}>
+    <div className={`w-1/3 max-w-md fixed top-0 bottom-0 bg-white flex flex-col ${props.show ? 'left-0' : '-left-full' }`}>
       {/* Header */}
-      <div className="flex bg-indigo-600 items-center ">
-        <Button icon={<AlternateEmailIcon />}  onClick={handleClose}/>
-        <div className="text-white">Nova conversa</div>
+      <div className="flex bg-indigo-600 items-center">
+        <div>Nova conversa</div>
+        <Button icon={<RiArrowLeftLine />} onClick={handleClose} />
       </div>
       {/* List */}
       <div className="flex-1 overflow-y-auto scroll">
         {list.map((item, key) => (
-          <div key={key} className="flex items-center p-4 cursor-pointer gap-4 hover:bg-indigo-300">
-            <Image
-              src={item.avatar}
-              width={50}
-              height={50}
-              alt="Picture of the author"
-              className="rounded-full"
-            />
-            <div>{item.name}</div>
+          <div onClick={() => addNewChat(item)} key={key} className="p-4 cursor-pointer gap-4 hover:bg-indigo-300">
+            <p>{item.username}</p>
           </div>
         ))}
       </div>
