@@ -1,74 +1,78 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import { useEffect, useState } from "react";
 
-import HeaderButtons from "@/components/HeaderButtons";
+import { RiAddLine } from "react-icons/ri";
+
 import ChatList from "@/components/ChatList";
 import Intro from "@/components/Intro";
 import ChatWindow from "@/components/ChatWindow";
-import Search from "@/components/Search";
+import Login from "@/components/Login";
 
-import { ChatType, UserType } from "@/types/ChatTypes";
-import { AllChats, User } from "@/utils/data";
+import { ChatType } from "@/types/ChatTypes";
 import NewChat from "@/components/NewChat";
 import Button from "@/components/Button";
 
-export default function Home() {
-  const [chatList, setChatList] = useState<ChatType[]>(AllChats);
+import { useUser} from "@/userContext";
+import { onChatList } from "@/lib/firebaseconfig";
 
+export default function Home() {
+  const [chatList, setChatList] = useState<ChatType[]>([]);
   const [activeChat, setActiveChat] = useState<ChatType | null>(null);
-  const [user, setUser] = useState<UserType>(User);
   const [showNewChat, setShowNewChat] = useState(false);
 
+  const uContext = useUser()
+
   const handleNewChat = () => {
-    setShowNewChat(true);
+    setShowNewChat(true)
   };
 
+  useEffect(() => {
+    if (uContext?.user) {
+      let unsub = onChatList(uContext?.user.id, setChatList);
+      return unsub;
+    }
+  }, [uContext?.user]);
+
   return (
-    <div className="flex h-screen">
-      <div className="w-1/3 max-w-md flex flex-col border border-blue-600">
-        <NewChat
-          show={showNewChat}
-          setShow={setShowNewChat}
-          user={user}
-          chatList={chatList}
-        />
-        {/* HEADER */}
-        <header className="h-16 flex justify-between items-center px-4">
-          <Image
-            src={user.avatar}
-            width={40}
-            height={40}
-            alt="Picture of the author"
-            className="rounded-full"
-          />
-          <Button icon={<AlternateEmailIcon />} onClick={handleNewChat} />
-          <HeaderButtons />
-        </header>
-
-        {/* SEARCH */}
-        <div className="bg-zinc-300 border-b-2 border-blue-700 px-4 py-1.5">
-          <Search />
-        </div>
-
-        {/* CHAT LIST */}
-        <div className="flex-1 bg-white overflow-y-auto scroll">
-          {chatList.map((item, key) => (
-            <ChatList
-              key={key}
-              data={item}
-              onClick={() => setActiveChat(item)}
-              active={activeChat?.chatId === item.chatId}
+    <>
+      {uContext?.user ? (
+        <div className="flex h-screen">
+          <div className="w-1/3 max-w-md flex flex-col border border-blue-600 ">
+            <NewChat
+              show={showNewChat}
+              setShow={setShowNewChat}
+              user={uContext.user}
+              chatList={chatList}
             />
-          ))}
+            {/* HEADER */}
+            <header className="h-16 flex justify-between items-center px-4">
+              <h3>{uContext?.user?.username}</h3>
+              <Button icon={<RiAddLine />} onClick={handleNewChat} />
+            </header>
+
+            {/* CHAT LIST */}
+            <div className="flex-1 bg-white overflow-y-auto scroll">
+              {chatList?.map((item, key) => (
+                <div key={key} onClick={() => setActiveChat(item)}>
+                  <ChatList
+                    data={item}
+                    active={activeChat?.chatId === item.chatId}
+                  />
+
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CONTENT AREA */}
+          <div className="flex-1">
+            {activeChat ? <ChatWindow user={uContext.user} data={activeChat} /> : <Intro />}
+          </div>
         </div>
-      </div>
-      {/* CONTENT AREA */}
-      <div className="flex-1">
-        {activeChat ? <ChatWindow user={user} /> : <Intro />}
-      </div>
-    </div>
+      ) : (
+        <Login></Login>
+      )}
+    </>
   );
 }
