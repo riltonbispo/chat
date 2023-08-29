@@ -1,16 +1,17 @@
 export type ChatType = {
-  chatId: number;
+  chatId: string;
   title: string
-  image: string
+  lastMessage: string
+  messages: any
+  lastMessageDate: any
+  with: string
+  date: any
+  author: string
+  body: string
 };
 
-export type MessageType = {
-  author: number
-  body: string
-}
-
 export type UserType = {
-  id: number
-  avatar: string
-  name: string
+  id: string
+  email: string
+  username: string
 }

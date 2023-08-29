@@ -9,7 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import EmojiPicker from "emoji-picker-react";
 
-import { ChatType, MessageType, UserType } from "@/types/ChatTypes";
+import { ChatType, UserType } from "@/types/ChatTypes";
 
 import Button from "@/components/Button";
 import Message from "./Message";
