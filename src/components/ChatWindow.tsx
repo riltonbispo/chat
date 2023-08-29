@@ -3,13 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import { RiEmojiStickerLine } from "react-icons/ri";
+import { RiEmojiStickerLine, RiSendPlaneFill, RiCloseLine } from "react-icons/ri";
 
-import CloseIcon from "@mui/icons-material/Close";
-import SendIcon from "@mui/icons-material/Send";
 import EmojiPicker from "emoji-picker-react";
 
-import { ChatType, UserType } from "@/types/ChatTypes";
+import { ChatType } from "@/types/ChatTypes";
 
 import Button from "@/components/Button";
 import Message from "./Message";
@@ -106,7 +104,7 @@ const ChatWindow = ({ user, data, ...props}: Props) => {
         {/* PRE */}
         <div className="flex mx-4">
           {emojiOpen && (
-            <Button icon={<CloseIcon />} onClick={handleCloseEmoji} />
+            <Button icon={<RiCloseLine />} onClick={handleCloseEmoji} />
           )}
           <Button
             icon={
@@ -132,7 +130,7 @@ const ChatWindow = ({ user, data, ...props}: Props) => {
 
         {/* POS */}
         <div className="flex mx-4">
-          <Button icon={<SendIcon />} onClick={handleSendClick} />
+          <Button icon={<RiSendPlaneFill />} onClick={handleSendClick} />
         </div>
       </div>
     </div>
