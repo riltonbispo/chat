@@ -3,24 +3,37 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import SearchIcon from "@mui/icons-material/Search";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import { RiEmojiStickerLine } from "react-icons/ri";
+
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import EmojiPicker from "emoji-picker-react";
 
-import { AllMessages } from "@/utils/data";
-import { MessageType, UserType } from "@/types/ChatTypes";
+import { ChatType, MessageType, UserType } from "@/types/ChatTypes";
 
 import Button from "@/components/Button";
 import Message from "./Message";
 import "./ChatWindow.css";
+import { onChatContent, sendMessage } from "@/lib/firebaseconfig";
 
-const ChatWindow = ({ user }: { user: UserType }) => {
+type Props = {
+  user: any,
+  data: ChatType
+}
+
+
+const ChatWindow = ({ user, data, ...props}: Props) => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
-  const [list, setList] = useState<MessageType[]>(AllMessages);
+  const [list, setList] = useState<any[]>([]);
   const body = useRef<null | HTMLDivElement>(null);
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    setList([])
+    let unsub = onChatContent(data.chatId, setList, setUsers)
+    return unsub
+  }, [data.chatId])
 
   useEffect(() => {
     if (body.current && body.current.scrollHeight > body.current.offsetHeight) {
@@ -36,7 +49,19 @@ const ChatWindow = ({ user }: { user: UserType }) => {
     setEmojiOpen(false);
   };
 
-  const handleSendClick = () => {};
+  const handleSendClick = () => {
+    if (text !== '' ) {
+      sendMessage(data, user.id, 'text', text, users)
+      setText('')
+      setEmojiOpen(false)
+    }
+  };
+
+  const handleInputKeyUp = (e: any) => {
+    if(e.keyCode === 13) {
+      handleSendClick()
+    }
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -50,13 +75,7 @@ const ChatWindow = ({ user }: { user: UserType }) => {
             alt="Picture of the author"
             className="rounded-full mx-2 "
           />
-          <div className="text-base">Name</div>
-        </div>
-        {/* HEADER BUTTONS */}
-        <div className="flex items-center ml-3.5">
-          <Button icon={<SearchIcon />} />
-          <Button icon={<SearchIcon />} />
-          <Button icon={<SearchIcon />} />
+          <div className="text-base">{data.title}</div>
         </div>
       </header>
 
@@ -91,7 +110,7 @@ const ChatWindow = ({ user }: { user: UserType }) => {
           )}
           <Button
             icon={
-              <AlternateEmailIcon
+              <RiEmojiStickerLine
                 className={`${emojiOpen && "text-indigo-600"}`}
               />
             }
@@ -107,6 +126,7 @@ const ChatWindow = ({ user }: { user: UserType }) => {
             placeholder="Digite sua Mensagem"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyUp={handleInputKeyUp}
           />
         </div>
 
