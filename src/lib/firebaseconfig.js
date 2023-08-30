@@ -39,9 +39,6 @@ export const currentUser = async (email) => {
 
     if (foundUser) {
       const data = foundUser.data();
-      console.log(
-        `id: ${foundUser.id} username: ${data.name} email: ${data.email}`
-      );
       return {
         id: foundUser.id,
         username: data.name,
@@ -56,6 +53,7 @@ export const currentUser = async (email) => {
   }
 };
 
+// A FAZER
 export const contactList = async (userId) => {
   let list = [];
   let results = await getDocs(usersCollections);
@@ -75,36 +73,55 @@ export const contactList = async (userId) => {
 };
 
 export const createChat = async (u1, u2) => {
-  let newChat = await addDoc(chatsCollections, {
-    messages: [],
-    users: [u1.id, u2.id],
-  });
-
   const user = doc(db, "users", u1.id);
   const user2 = doc(db, "users", u2.id);
 
-  await updateDoc(user, {
-    chats: arrayUnion({
-      chatId: newChat.id,
-      title: u2.username,
-      with: u2.id,
-    }),
-  });
+  let userSnap = await getDoc(user);
+  let user2Snap = await getDoc(user2);
 
-  await updateDoc(user2, {
-    chats: arrayUnion({
-      chatId: newChat.id,
-      title: u1.username,
-      with: u1.id,
-    }),
-  });
+  if (userSnap.exists() && user2Snap.exists()) {
+    let userData = userSnap.data();
+    let user2Data = user2Snap.data();
+
+    // Check if a chat already exists between the users
+    let hasChat = userData.chats.some(
+      (chat) =>
+        chat.with === user2.id ||
+        user2Data.chats.some((c) => c.with === user.id)
+    );
+
+    if (!hasChat) {
+      let newChat = await addDoc(chatsCollections, {
+        messages: [],
+        users: [u1.id, u2.id],
+      });
+
+      await updateDoc(user, {
+        chats: arrayUnion({
+          chatId: newChat.id,
+          title: u2.username,
+          with: u2.id,
+        }),
+      });
+
+      await updateDoc(user2, {
+        chats: arrayUnion({
+          chatId: newChat.id,
+          title: u1.username,
+          with: u1.id,
+        }),
+      });
+    }
+  }
 };
 
 export const onChatList = (userId, setChatList) => {
   return onSnapshot(doc(db, "users", userId), (doc) => {
     let data = doc.data();
     if (data?.chats) {
-      const sortedChats = data.chats.sort((a, b) => b.lastMessageDate - a.lastMessageDate);
+      const sortedChats = data.chats.sort(
+        (a, b) => b.lastMessageDate - a.lastMessageDate
+      );
       setChatList(sortedChats);
     }
   });
