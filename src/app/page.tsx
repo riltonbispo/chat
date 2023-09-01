@@ -14,7 +14,7 @@ import Button from "@/components/Button";
 
 import { useUser } from "@/userContext";
 import { onChatList } from "@/lib/firebaseconfig";
-import { Chat } from "@/types/usersType";
+import { Chat } from "@/types/allTypes";
 
 export default function Home() {
   const [chatList, setChatList] = useState<Chat[]>([]);

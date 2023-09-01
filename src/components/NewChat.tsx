@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { UserType, ChatType } from "@/types/ChatTypes";
 import { contactList, createChat } from "@/lib/firebaseconfig";
 import { RiArrowLeftLine } from "react-icons/ri";
-import { Chat, User } from "@/types/usersType";
+import { Chat, User } from "@/types/allTypes";
 
 type Props = {
   show: boolean;

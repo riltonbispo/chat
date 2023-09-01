@@ -1,7 +1,7 @@
 'user client'
 
 import React, {useState, useEffect} from "react";
-import { MessageType, User } from "@/types/usersType";
+import { MessageType, User } from "@/types/allTypes";
 
 type Props = {
   data: MessageType;

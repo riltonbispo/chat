@@ -16,7 +16,7 @@ import Button from "@/components/Button";
 import Message from "./Message";
 import "./ChatWindow.css";
 import { onChatContent, sendMessage } from "@/lib/firebaseconfig";
-import { Chat, MessageType, User } from "@/types/usersType";
+import { Chat, MessageType, User } from "@/types/allTypes";
 
 type Props = {
   user: User;

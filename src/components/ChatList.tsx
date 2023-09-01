@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { Chat } from "@/types/usersType";
+import { Chat } from "@/types/allTypes";
 
 type Props = {
   active: boolean;
