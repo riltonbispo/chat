@@ -1,37 +1,40 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  KeyboardEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
 
 import { RiEmojiStickerLine, RiSendPlaneFill, RiCloseLine } from "react-icons/ri";
 
 import EmojiPicker from "emoji-picker-react";
 
-import { ChatType } from "@/types/ChatTypes";
-
 import Button from "@/components/Button";
 import Message from "./Message";
 import "./ChatWindow.css";
 import { onChatContent, sendMessage } from "@/lib/firebaseconfig";
+import { Chat, MessageType, User } from "@/types/usersType";
 
 type Props = {
-  user: any,
-  data: ChatType
-}
+  user: User;
+  data: Chat;
+};
 
-
-const ChatWindow = ({ user, data, ...props}: Props) => {
+const ChatWindow = ({ user, data }: Props) => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<MessageType[]>([]);
+  const [users, setUsers] = useState([]);
   const body = useRef<null | HTMLDivElement>(null);
-  const [users, setUsers] = useState([])
 
   useEffect(() => {
-    setList([])
-    let unsub = onChatContent(data.chatId, setList, setUsers)
-    return unsub
-  }, [data.chatId])
+    setList([]);
+    let unsub = onChatContent(data.chatId, setList, setUsers);
+    return unsub;
+  }, [data.chatId]);
 
   useEffect(() => {
     if (body.current && body.current.scrollHeight > body.current.offsetHeight) {
@@ -48,18 +51,18 @@ const ChatWindow = ({ user, data, ...props}: Props) => {
   };
 
   const handleSendClick = () => {
-    if (text !== '' ) {
-      sendMessage(data, user.id, 'text', text, users)
-      setText('')
-      setEmojiOpen(false)
+    if (text !== "") {
+      sendMessage(data, user.id, "text", text, users);
+      setText("");
+      setEmojiOpen(false);
     }
   };
 
-  const handleInputKeyUp = (e: any) => {
-    if(e.keyCode === 13) {
-      handleSendClick()
+  const handleInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == 'Enter') {
+      handleSendClick();
     }
-  }
+  };
 
   return (
     <div className="flex flex-col h-full">

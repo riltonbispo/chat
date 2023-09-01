@@ -41,8 +41,9 @@ export const currentUser = async (email) => {
       const data = foundUser.data();
       return {
         id: foundUser.id,
-        username: data.name,
+        name: data.name,
         email: data.email,
+        chats: data.chats,
       };
     } else {
       return null;

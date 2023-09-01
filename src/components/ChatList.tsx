@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { ChatType } from "@/types/ChatTypes";
+import { Chat } from "@/types/usersType";
 
 type Props = {
   active: boolean;
-  data: ChatType;
+  data: Chat;
 };
 
 const ChatList = ({ ...props }: Props) => {

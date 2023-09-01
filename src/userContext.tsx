@@ -1,22 +1,17 @@
 'use client'
 
-import { UserType } from "./types/ChatTypes";
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useState
-} from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
+import { User } from "./types/usersType";
 
 type UserContextType = {
-  user: UserType | null;
-  setUser: (user: UserType | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function ProviderUserContext({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

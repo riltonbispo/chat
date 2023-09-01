@@ -1,11 +1,11 @@
 'user client'
 
 import React, {useState, useEffect} from "react";
-import { UserType, ChatType } from "@/types/ChatTypes";
+import { MessageType, User } from "@/types/usersType";
 
 type Props = {
-  data: ChatType
-  user: UserType
+  data: MessageType;
+  user: User;
 };
 
 const Message = ({ ...props }: Props) => {

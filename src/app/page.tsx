@@ -9,22 +9,22 @@ import Intro from "@/components/Intro";
 import ChatWindow from "@/components/ChatWindow";
 import Login from "@/components/Login";
 
-import { ChatType } from "@/types/ChatTypes";
 import NewChat from "@/components/NewChat";
 import Button from "@/components/Button";
 
-import { useUser} from "@/userContext";
+import { useUser } from "@/userContext";
 import { onChatList } from "@/lib/firebaseconfig";
+import { Chat } from "@/types/usersType";
 
 export default function Home() {
-  const [chatList, setChatList] = useState<ChatType[]>([]);
-  const [activeChat, setActiveChat] = useState<ChatType | null>(null);
+  const [chatList, setChatList] = useState<Chat[]>([]);
+  const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [showNewChat, setShowNewChat] = useState(false);
 
-  const uContext = useUser()
+  const uContext = useUser();
 
   const handleNewChat = () => {
-    setShowNewChat(true)
+    setShowNewChat(true);
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Home() {
             />
             {/* HEADER */}
             <header className="h-16 flex justify-between items-center px-4">
-              <h3>{uContext?.user?.username}</h3>
+              <h3>{uContext?.user?.name}</h3>
               <Button icon={<RiAddLine />} onClick={handleNewChat} />
             </header>
 
@@ -59,7 +59,6 @@ export default function Home() {
                     data={item}
                     active={activeChat?.chatId === item.chatId}
                   />
-
                 </div>
               ))}
             </div>
@@ -67,7 +66,11 @@ export default function Home() {
 
           {/* CONTENT AREA */}
           <div className="flex-1">
-            {activeChat ? <ChatWindow user={uContext.user} data={activeChat} /> : <Intro />}
+            {activeChat ? (
+              <ChatWindow user={uContext.user} data={activeChat} />
+            ) : (
+              <Intro />
+            )}
           </div>
         </div>
       ) : (
