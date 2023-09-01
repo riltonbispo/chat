@@ -28,14 +28,11 @@ const ChatList = ({ ...props }: Props) => {
         props.active && "bg-indigo-300"
       }`}
     >
-      {/* ALL LIST */}
       <div className="flex-1 flex flex-col justify-center h-full border-b border-gray-300 px-2 flex-wrap min-w-0">
-        {/* UNIC LIST */}
         <div className="flex justify-between items-center w-full">
           <div className="text-base text-zinc-800">{props.data.title}</div>
           <div className="text-xs text-zinc-500">{time}</div>
         </div>
-        {/* UNIC LIST */}
         <div className="flex justify-between items-center w-full text-sm text-zinc-500">
           <p className="overflow-hidden whitespace-nowrap text-ellipsis	m-0">
             {props.data.lastMessage}

@@ -13,8 +13,8 @@ import NewChat from "@/components/NewChat";
 import Button from "@/components/Button";
 
 import { useUser } from "@/userContext";
-import { onChatList } from "@/lib/firebaseconfig";
 import { Chat } from "@/types/allTypes";
+import { chatListOberser } from "@/services/observers/chatsObersers";
 
 export default function Home() {
   const [chatList, setChatList] = useState<Chat[]>([]);
@@ -29,7 +29,7 @@ export default function Home() {
 
   useEffect(() => {
     if (uContext?.user) {
-      let unsub = onChatList(uContext?.user.id, setChatList);
+      let unsub = chatListOberser(uContext.user.id, setChatList);
       return unsub;
     }
   }, [uContext?.user]);
@@ -45,13 +45,11 @@ export default function Home() {
               user={uContext.user}
               chatList={chatList}
             />
-            {/* HEADER */}
             <header className="h-16 flex justify-between items-center px-4">
               <h3>{uContext?.user?.name}</h3>
               <Button icon={<RiAddLine />} onClick={handleNewChat} />
             </header>
 
-            {/* CHAT LIST */}
             <div className="flex-1 bg-white overflow-y-auto scroll">
               {chatList?.map((item, key) => (
                 <div key={key} onClick={() => setActiveChat(item)}>
@@ -64,7 +62,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CONTENT AREA */}
           <div className="flex-1">
             {activeChat ? (
               <ChatWindow user={uContext.user} data={activeChat} />

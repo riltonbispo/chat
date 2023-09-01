@@ -21,6 +21,10 @@ export type ChatData = {
   messages: MessageType[];
 };
 
+export type chatUsers = {
+  users: string[];
+};
+
 export type MessageType = {
   author: string;
   body: string;

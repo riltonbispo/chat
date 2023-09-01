@@ -2,10 +2,12 @@
 
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
-import { UserType, ChatType } from "@/types/ChatTypes";
-import { contactList, createChat } from "@/lib/firebaseconfig";
 import { RiArrowLeftLine } from "react-icons/ri";
 import { Chat, User } from "@/types/allTypes";
+import {
+  contactListAction,
+  createChatAction,
+} from "@/services/actions/userActions";
 
 type Props = {
   show: boolean;
@@ -20,7 +22,7 @@ const NewChat = ({ ...props }: Props) => {
   useEffect(() => {
     const getList = async () => {
       if (props.user) {
-        let results = await contactList(props.user.id);
+        let results = await contactListAction(props.user.id);
         setList(results);
       }
     };
@@ -32,7 +34,7 @@ const NewChat = ({ ...props }: Props) => {
   };
 
   const addNewChat = async (u: User) => {
-    await createChat(props.user, u);
+    await createChatAction(props.user, u);
 
     handleClose();
   };
@@ -43,12 +45,10 @@ const NewChat = ({ ...props }: Props) => {
         props.show ? "left-0" : "-left-full"
       }`}
     >
-      {/* Header */}
       <div className="flex bg-indigo-600 items-center">
         <div>Nova conversa</div>
         <Button icon={<RiArrowLeftLine />} onClick={handleClose} />
       </div>
-      {/* List */}
       <div className="flex-1 overflow-y-auto scroll">
         {list.map((item, key) => (
           <div
@@ -56,7 +56,7 @@ const NewChat = ({ ...props }: Props) => {
             key={key}
             className="p-4 cursor-pointer gap-4 hover:bg-indigo-300"
           >
-            <p>{item.email}</p>
+            <p>{item.name}</p>
           </div>
         ))}
       </div>

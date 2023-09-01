@@ -5,8 +5,12 @@ import {
   useCreateUserWithEmailAndPassword,
   useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
-import { auth, addUser, currentUser } from "@/lib/firebaseconfig";
+import { auth } from "@/firebaseconfig";
 import { useUser } from "@/userContext";
+import {
+  addUserAction,
+  currentUserAction,
+} from "@/services/actions/userActions";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -33,7 +37,7 @@ const Login = () => {
   const handleCreateAccount = async () => {
     try {
       await createUserWithEmailAndPassword(email, password);
-      addUser(email, username);
+      addUserAction(email, username);
       await handleLogin();
     } catch (error) {
       console.error("Erro ao criar conta:", error);
@@ -43,7 +47,7 @@ const Login = () => {
   const handleLogin = async () => {
     signInWithEmailAndPassword(email, password);
     try {
-      const user = await currentUser(email);
+      const user = await currentUserAction(email);
       if (user) {
         uContext?.setUser(user);
       }

@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  KeyboardEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { RiEmojiStickerLine, RiSendPlaneFill, RiCloseLine } from "react-icons/ri";
@@ -15,24 +10,29 @@ import EmojiPicker from "emoji-picker-react";
 import Button from "@/components/Button";
 import Message from "./Message";
 import "./ChatWindow.css";
-import { onChatContent, sendMessage } from "@/lib/firebaseconfig";
-import { Chat, MessageType, User } from "@/types/allTypes";
+import { Chat, MessageType, User, chatUsers } from "@/types/allTypes";
+import { chatContentObserver } from "@/services/observers/chatsObersers";
+import { sendMessageChatAction } from "@/services/actions/chatActions";
 
 type Props = {
   user: User;
   data: Chat;
 };
 
+const initialUsersState: chatUsers = {
+  users: [],
+};
+
 const ChatWindow = ({ user, data }: Props) => {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
   const [list, setList] = useState<MessageType[]>([]);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<chatUsers>(initialUsersState);
   const body = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
     setList([]);
-    let unsub = onChatContent(data.chatId, setList, setUsers);
+    let unsub = chatContentObserver(data.chatId, setList, setUsers);
     return unsub;
   }, [data.chatId]);
 
@@ -52,14 +52,14 @@ const ChatWindow = ({ user, data }: Props) => {
 
   const handleSendClick = () => {
     if (text !== "") {
-      sendMessage(data, user.id, "text", text, users);
+      sendMessageChatAction(data.chatId, user.id, text, users);
       setText("");
       setEmojiOpen(false);
     }
   };
 
   const handleInputKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key == 'Enter') {
+    if (e.key == "Enter") {
       handleSendClick();
     }
   };
@@ -67,7 +67,6 @@ const ChatWindow = ({ user, data }: Props) => {
   return (
     <div className="flex flex-col h-full">
       <header className="h-16 border-b-2 border-blue-700 flex justify-between items-center ">
-        {/* HEADER INFO */}
         <div className="flex items-center cursor-pointer">
           <Image
             src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
@@ -80,7 +79,6 @@ const ChatWindow = ({ user, data }: Props) => {
         </div>
       </header>
 
-      {/* BODY */}
       <div
         ref={body}
         className="flex-1 overflow-y-auto bg-indigo-100 py-2 px-4 scroll"
@@ -90,7 +88,6 @@ const ChatWindow = ({ user, data }: Props) => {
         ))}
       </div>
 
-      {/* EMOJI AREA */}
       <div
         className={`${
           emojiOpen ? "h-80" : "h-0"
@@ -102,9 +99,7 @@ const ChatWindow = ({ user, data }: Props) => {
         />
       </div>
 
-      {/* FOOTER */}
       <div className="h-16 flex items-center">
-        {/* PRE */}
         <div className="flex mx-4">
           {emojiOpen && (
             <Button icon={<RiCloseLine />} onClick={handleCloseEmoji} />
@@ -119,7 +114,6 @@ const ChatWindow = ({ user, data }: Props) => {
           />
         </div>
 
-        {/* INPUT */}
         <div className="flex-1">
           <input
             type="text"
@@ -131,7 +125,6 @@ const ChatWindow = ({ user, data }: Props) => {
           />
         </div>
 
-        {/* POS */}
         <div className="flex mx-4">
           <Button icon={<RiSendPlaneFill />} onClick={handleSendClick} />
         </div>
