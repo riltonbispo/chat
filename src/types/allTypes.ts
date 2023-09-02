@@ -13,14 +13,6 @@ export type Chat = {
   lastMessageDate: any;
 };
 
-export type ChatCollection = {
-  [chatId: string]: ChatData;
-};
-
-export type ChatData = {
-  messages: MessageType[];
-};
-
 export type chatUsers = {
   users: string[];
 };
