@@ -2,6 +2,7 @@ import { arrayUnion, collection, getDoc, updateDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { db } from "@/firebaseconfig";
 import { Chat, chatUsers } from "@/types/allTypes";
+import { updateChatUserAcess } from "./userAcess";
 
 const chatsReferences = collection(db, "chats");
 const usersReferences = collection(db, "users");
@@ -15,6 +16,11 @@ export const sendMessageChatAcess = async (
   const chatRef = doc(chatsReferences, chatId);
   let now = new Date();
 
+  for (let i in users) {
+    let userRef = doc(usersReferences, users[i]);
+    updateChatUserAcess(userRef, chatId, body, now);
+  }
+
   await updateDoc(chatRef, {
     messages: arrayUnion({
       type: "text",
@@ -23,26 +29,4 @@ export const sendMessageChatAcess = async (
       date: now,
     }),
   });
-
-  for (let user of users.users) {
-    const userRef = doc(usersReferences, user);
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists()) {
-      const data = userSnap.data();
-
-      const updatedChats = data.chats.map((chat: Chat) => {
-        if (chat.chatId === chatId) {
-          return {
-            ...chat,
-            lastMessage: body,
-            lastMessageDate: now,
-          };
-        }
-        return chat;
-      });
-
-      await updateDoc(userRef, { chats: updatedChats });
-    }
-  }
 };

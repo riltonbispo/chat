@@ -13,9 +13,7 @@ export type Chat = {
   lastMessageDate: any;
 };
 
-export type chatUsers = {
-  users: string[];
-};
+export type chatUsers = string[];
 
 export type MessageType = {
   author: string;
