@@ -18,7 +18,7 @@ export const sendMessageChatAcess = async (
 
   for (let i in users) {
     let userRef = doc(usersReferences, users[i]);
-    updateChatUserAcess(userRef, chatId, body, now);
+    await updateChatUserAcess(userRef, chatId, body, now);
   }
 
   await updateDoc(chatRef, {
