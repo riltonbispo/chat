@@ -16,28 +16,31 @@ export const sendMessageChatAcess = async (
   const chatRef = doc(chatsReferences, chatId);
   let now = new Date();
 
-  for (let i in users) {
-    let userRef = doc(usersReferences, users[i]);
-    let userSnap = await getDoc(userRef);
+  for (const userIdToUpdate of users) {
+    const userRef = doc(usersReferences, userIdToUpdate);
+    const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
-      let uData = userSnap.data();
-      if (uData.chats) {
-        let chats = [...uData.chats];
-
-        for (let e in chats) {
-          if (chats[e].chatId == chatId) {
-            chats[e].lastMessage = body;
-            chats[e].lastMessageDate = now;
+      const userData = userSnap.data();
+      if (userData?.chats) {
+        const updatedChats = userData.chats.map((chat: Chat) => {
+          if (chat.chatId === chatId) {
+            return {
+              ...chat,
+              lastMessage: body,
+              lastMessageDate: now,
+            };
           }
-        }
+          return chat;
+        });
 
         await updateDoc(userRef, {
-          chats,
+          chats: updatedChats,
         });
       }
     }
   }
+
 
   await updateDoc(chatRef, {
     messages: arrayUnion({
