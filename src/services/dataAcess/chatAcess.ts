@@ -18,7 +18,25 @@ export const sendMessageChatAcess = async (
 
   for (let i in users) {
     let userRef = doc(usersReferences, users[i]);
-    await updateChatUserAcess(userRef, chatId, body, now);
+    let userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      let uData = userSnap.data();
+      if (uData.chats) {
+        let chats = [...uData.chats];
+
+        for (let e in chats) {
+          if (chats[e].chatId == chatId) {
+            chats[e].lastMessage = body;
+            chats[e].lastMessageDate = now;
+          }
+        }
+
+        await updateDoc(userRef, {
+          chats,
+        });
+      }
+    }
   }
 
   await updateDoc(chatRef, {
