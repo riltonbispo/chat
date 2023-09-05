@@ -19,9 +19,7 @@ type Props = {
   data: Chat;
 };
 
-const initialUsersState: chatUsers = {
-  users: [],
-};
+const initialUsersState: chatUsers = [];
 
 const ChatWindow = ({ user, data }: Props) => {
   const [emojiOpen, setEmojiOpen] = useState(false);
