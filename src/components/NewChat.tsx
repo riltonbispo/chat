@@ -41,12 +41,12 @@ const NewChat = ({ ...props }: Props) => {
 
   return (
     <div
-      className={`w-1/3 max-w-md fixed top-0 bottom-0 bg-white flex flex-col ${
-        props.show ? "left-0" : "-left-full"
+      className={`w-1/3 max-w-md fixed top-0 bottom-0 bg-white flex flex-col transition-transform duration-300 transform ${
+        props.show ? "left-0" : "-translate-x-full"
       }`}
     >
-      <div className="flex bg-indigo-600 items-center">
-        <div>Nova conversa</div>
+      <div className="flex bg-indigo-600 items-center p-4 text-white">
+        <div className="flex-1 text-center text-lg">Nova Conversa</div>
         <Button icon={<RiArrowLeftLine />} onClick={handleClose} />
       </div>
       <div className="flex-1 overflow-y-auto scroll">
@@ -54,9 +54,9 @@ const NewChat = ({ ...props }: Props) => {
           <div
             onClick={() => addNewChat(item)}
             key={key}
-            className="p-4 cursor-pointer gap-4 hover:bg-indigo-300"
+            className="p-4 cursor-pointer hover:bg-indigo-100 transition-colors duration-300"
           >
-            <p>{item.name}</p>
+            <p className="text-lg">{item.name}</p>
           </div>
         ))}
       </div>
