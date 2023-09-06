@@ -1,4 +1,4 @@
-import { db } from "@/firebaseconfig";
+import { db } from "@/services/firebaseconfig";
 import { Chat, MessageType, chatUsers } from "@/types/allTypes";
 import { DocumentData, collection, doc, onSnapshot } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";

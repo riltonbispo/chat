@@ -5,7 +5,7 @@ import {
   useCreateUserWithEmailAndPassword,
   useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
-import { auth } from "@/firebaseconfig";
+import { auth } from "@/services/firebaseconfig";
 import { useUser } from "@/userContext";
 import {
   addUserAction,

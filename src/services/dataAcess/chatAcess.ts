@@ -1,6 +1,6 @@
 import { arrayUnion, collection, getDoc, updateDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
-import { db } from "@/firebaseconfig";
+import { db } from "@/services/firebaseconfig";
 import { Chat, chatUsers } from "@/types/allTypes";
 import { updateChatUserAcess } from "./userAcess";
 

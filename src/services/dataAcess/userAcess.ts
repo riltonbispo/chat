@@ -1,4 +1,4 @@
-import { db } from "@/firebaseconfig";
+import { db } from "@/services/firebaseconfig";
 import { Chat, User } from "@/types/allTypes";
 
 import {
