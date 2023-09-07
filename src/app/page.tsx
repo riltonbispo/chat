@@ -15,6 +15,8 @@ import Button from "@/components/Button";
 import { useUser } from "@/userContext";
 import { Chat } from "@/types/allTypes";
 import { chatListOberser } from "@/services/observers/chatsObersers";
+import { signOut } from "firebase/auth";
+import { auth } from "@/services/firebaseconfig";
 
 export default function Home() {
   const [chatList, setChatList] = useState<Chat[]>([]);
@@ -34,6 +36,16 @@ export default function Home() {
     }
   }, [uContext?.user]);
 
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        uContext?.setUser(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       {uContext?.user ? (
@@ -47,7 +59,15 @@ export default function Home() {
             />
             <header className="h-16 flex justify-between items-center px-4">
               <h3>{uContext?.user?.name}</h3>
-              <Button icon={<RiAddLine />} onClick={handleNewChat} />
+              <div className="flex items-center">
+                <Button icon={<RiAddLine />} onClick={handleNewChat} />
+                <button
+                  onClick={handleSignOut}
+                  className="py-1 px-4 rounded-sm bg-red-600 text-white"
+                >
+                  Sair
+                </button>
+              </div>
             </header>
 
             <div className="flex-1 bg-white overflow-y-auto scroll">
