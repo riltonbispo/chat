@@ -114,7 +114,7 @@ const ChatWindow = ({ user, data }: Props) => {
         <div className="flex-1">
           <input
             type="text"
-            className="w-full h-10 border-0 outline-0 rounded-full pl-4 border-2 border-stone-800"
+            className="w-full h-10 outline-0 rounded-full pl-4 border-2 border-stone-800"
             placeholder="Digite sua Mensagem"
             value={text}
             onChange={(e) => setText(e.target.value)}
