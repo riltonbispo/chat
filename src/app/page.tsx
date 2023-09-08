@@ -40,6 +40,7 @@ export default function Home() {
     signOut(auth)
       .then(() => {
         uContext?.setUser(null);
+        setChatList([]);
       })
       .catch((error) => {
         console.log(error);
