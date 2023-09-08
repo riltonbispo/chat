@@ -32,11 +32,13 @@ const Message = ({ ...props }: Props) => {
     >
       <div
         className={`${
-          props.user.id === props.data.author ? "bg-white " : "bg-emerald-100"
-        } rounded-sm  flex flex-col p-2 max-w-3xl`}
+          props.user.id === props.data.author
+            ? "bg-orange-400 "
+            : "bg-stone-400"
+        } rounded-lg  flex flex-col p-2 max-w-3xl`}
       >
         <div className="">{props.data.body}</div>
-        <div className="text-right">{time}</div>
+        <div className="text-right text-sm">{time}</div>
       </div>
     </div>
   );
