@@ -24,16 +24,22 @@ const ChatList = ({ ...props }: Props) => {
 
   return (
     <div
-      className={`flex cursor-pointer items-center h-16 hover:bg-sky-100 ${
-        props.active && "bg-indigo-300"
+      className={`flex cursor-pointer items-center h-16 hover:bg-stone-500 rounded-lg my-2 ${
+        props.active && "bg-stone-900 hover:bg-stone-900"
       }`}
     >
-      <div className="flex-1 flex flex-col justify-center h-full border-b border-gray-300 px-2 flex-wrap min-w-0">
+      <div className="flex-1 flex flex-col justify-center h-full px-2 flex-wrap min-w-0">
         <div className="flex justify-between items-center w-full">
-          <div className="text-base text-zinc-800">{props.data.title}</div>
-          <div className="text-xs text-zinc-500">{time}</div>
+          <div
+            className={`text-base font-medium ${
+              props.active ? "text-orange-400" : "text-zinc-100"
+            }`}
+          >
+            {props.data.title}
+          </div>
+          <div className="text-xs text-zinc-300">{time}</div>
         </div>
-        <div className="flex justify-between items-center w-full text-sm text-zinc-500">
+        <div className="flex justify-between items-center w-full text-sm text-zinc-300">
           <p className="overflow-hidden whitespace-nowrap text-ellipsis	m-0">
             {props.data.lastMessage}
           </p>
