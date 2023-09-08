@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import { RiEmojiStickerLine, RiSendPlaneFill, RiCloseLine } from "react-icons/ri";
+import { FaRegFaceGrin, FaXmark } from "react-icons/fa6";
 
 import EmojiPicker from "emoji-picker-react";
 
@@ -65,21 +66,21 @@ const ChatWindow = ({ user, data }: Props) => {
   return (
     <div className="flex flex-col h-full">
       <header className="h-16 border-b-2 border-blue-700 flex justify-between items-center ">
-        <div className="flex items-center cursor-pointer">
+        <div className="flex items-center px-6 gap-2">
           <Image
-            src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
-            width={40}
-            height={40}
+            src="https://www.tenhomaisdiscosqueamigos.com/wp-content/uploads/2019/04/kendrick-lamar.jpg"
+            width={60}
+            height={60}
             alt="Picture of the author"
-            className="rounded-full mx-2 "
+            className="rounded-xl h-14 w-14 object-cover"
           />
-          <div className="text-base">{data.title}</div>
+          <div className="text-xl">{data.title}</div>
         </div>
       </header>
 
       <div
         ref={body}
-        className="flex-1 overflow-y-auto bg-indigo-100 py-2 px-4 scroll"
+        className="flex-1 overflow-y-auto bg-stone-800 py-2 px-4 scroll"
       >
         {list.map((item, key) => (
           <Message key={key} data={item} user={user} />
@@ -99,23 +100,21 @@ const ChatWindow = ({ user, data }: Props) => {
 
       <div className="h-16 flex items-center">
         <div className="flex mx-4">
-          {emojiOpen && (
-            <Button icon={<RiCloseLine />} onClick={handleCloseEmoji} />
+          {emojiOpen ? (
+            <button onClick={handleCloseEmoji}>
+              <FaXmark />
+            </button>
+          ) : (
+            <button onClick={handleOpenEmoji}>
+              <FaRegFaceGrin />
+            </button>
           )}
-          <Button
-            icon={
-              <RiEmojiStickerLine
-                className={`${emojiOpen && "text-indigo-600"}`}
-              />
-            }
-            onClick={handleOpenEmoji}
-          />
         </div>
 
         <div className="flex-1">
           <input
             type="text"
-            className="w-full h-10 border-0 outline-0 rounded-full pl-4 bg-indigo-50"
+            className="w-full h-10 border-0 outline-0 rounded-full pl-4 border-2 border-stone-800"
             placeholder="Digite sua Mensagem"
             value={text}
             onChange={(e) => setText(e.target.value)}
