@@ -8,8 +8,18 @@
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #f97316;
 }
+
+.scroll__newchat::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scroll__newchat::-webkit-scrollbar-thumb {
+  background-color: #292524;
+}
+
 
 aside.EmojiPickerReact {
   width: auto;
