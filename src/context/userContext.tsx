@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
 import { ReactNode, createContext, useContext, useState } from "react";
-import { User } from "./types/allTypes";
+import { User } from "../types/allTypes";
 
 type UserContextType = {
   user: User | null;

@@ -10,7 +10,7 @@ import Login from "@/components/Login";
 import NewChat from "@/components/NewChat";
 import Menu from "@/components/Menu";
 
-import { useUser } from "@/userContext";
+import { useUser } from "@/context/userContext";
 import { Chat } from "@/types/allTypes";
 import { chatListOberser } from "@/services/observers/chatsObersers";
 import { signOut } from "firebase/auth";
