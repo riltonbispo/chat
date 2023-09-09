@@ -3,19 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-import {
-  FaPlus,
-  FaRightFromBracket,
-  FaCommentSlash,
-  FaCommentDots,
-  FaXmark,
-} from "react-icons/fa6";
-
 import ChatList from "@/components/ChatList";
 import Intro from "@/components/Intro";
 import ChatWindow from "@/components/ChatWindow";
 import Login from "@/components/Login";
 import NewChat from "@/components/NewChat";
+import Menu from "@/components/Menu";
 
 import { useUser } from "@/userContext";
 import { Chat } from "@/types/allTypes";
@@ -63,29 +56,13 @@ export default function Home() {
     <>
       {uContext?.user ? (
         <div className="flex h-screen">
-          <div className="flex flex-col items-center justify-between py-20 w-24 bg-stone-900 h-screen z-50">
-            <div className="flex flex-col gap-6">
-              <button
-                onClick={handleNewChat}
-                className="py-2 px-2 text-orange-300 border-2 border-orange-300 rounded-full hover:bg-stone-700"
-              >
-                {showNewChat ? <FaXmark /> : <FaPlus />}
-              </button>
-              <button
-                onClick={handleShowChat}
-                className="py-2 px-2 text-orange-300 border-2 border-orange-300 rounded-full hover:bg-stone-700"
-              >
-                {showChat ? <FaCommentSlash /> : <FaCommentDots />}
-              </button>
-            </div>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2 py-2 px-2 text-orange-300 border-2 border-orange-300 rounded-full hover:text-red-500 hover:border-red-500"
-            >
-              <span>sair</span>
-              <FaRightFromBracket />
-            </button>
-          </div>
+          <Menu
+            showChat={showChat}
+            showNewChat={showNewChat}
+            action1={handleNewChat}
+            action2={handleShowChat}
+            action3={handleSignOut}
+          />
           {showNewChat && (
             <NewChat
               show={showNewChat}
@@ -121,7 +98,6 @@ export default function Home() {
               </div>
             </>
           )}
-
           <div className="flex-1">
             {activeChat ? (
               <ChatWindow user={uContext.user} data={activeChat} />
