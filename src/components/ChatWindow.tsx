@@ -3,8 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import { RiEmojiStickerLine, RiSendPlaneFill, RiCloseLine } from "react-icons/ri";
+import { RiSendPlaneFill } from "react-icons/ri";
 import { FaRegFaceGrin, FaXmark } from "react-icons/fa6";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+
+import "react-loading-skeleton/dist/skeleton.css";
 
 import EmojiPicker from "emoji-picker-react";
 
@@ -14,6 +17,7 @@ import "./ChatWindow.css";
 import { Chat, MessageType, User, chatUsers } from "@/types/allTypes";
 import { chatContentObserver } from "@/services/observers/chatsObersers";
 import { sendMessageChatAction } from "@/services/actions/chatActions";
+import MessageSkeleton from "./skeletons/MessageSkeleton";
 
 type Props = {
   user: User;
@@ -82,9 +86,11 @@ const ChatWindow = ({ user, data }: Props) => {
         ref={body}
         className="flex-1 overflow-y-auto bg-stone-800 py-2 px-4 scroll"
       >
-        {list.map((item, key) => (
-          <Message key={key} data={item} user={user} />
-        ))}
+        {list.length > 0 ? (
+          list.map((item, key) => <Message key={key} data={item} user={user} />)
+        ) : (
+          <MessageSkeleton />
+        )}
       </div>
 
       <div
