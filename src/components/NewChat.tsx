@@ -6,6 +6,7 @@ import {
   contactListAction,
   createChatAction,
 } from "@/services/actions/userActions";
+import NewChatSkeleton from "./skeletons/NewChatSkeleton";
 
 type Props = {
   show: boolean;
@@ -43,15 +44,21 @@ const NewChat = ({ ...props }: Props) => {
         <div className="flex-1 text-center text-lg">Nova Conversa</div>
       </div>
       <div className="flex-1 overflow-y-auto scroll__newchat">
-        {list.map((item, key) => (
-          <div
-            onClick={() => addNewChat(item)}
-            key={key}
-            className="p-4 cursor-pointer hover:bg-stone-800 hover:text-white transition-colors duration-300 text-stone-900"
-          >
-            <p className="text-lg">{item.name}</p>
+        {list.length > 0 ? (
+          list.map((item, key) => (
+            <div
+              onClick={() => addNewChat(item)}
+              key={key}
+              className="p-4 cursor-pointer hover:bg-stone-800 hover:text-white transition-colors duration-300 text-stone-900"
+            >
+              <p className="text-lg">{item.name}</p>
+            </div>
+          ))
+        ) : (
+          <div className="px-2">
+            <NewChatSkeleton />
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
